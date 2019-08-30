@@ -5,15 +5,23 @@ proceso=0
 def iniciar():
     global proceso
     global tini
-
+   
+    # Save the starting time of our timer as a time reference
     tini = datetime.now()
 
-    time['text'] = contador
+    # Calls the main function that will repeat recusively to work as a precise clock
     proceso=time.after(1, ejecutar)
  
 def ejecutar():
   global proceso
   global tini
+  
+  # Write the time
+  time['text'] = datetime.now()-tini
+  
+  #Calls itself recursively every ms updating the time on the timer
+  proceso=time.after(1, ejecutar)
+  
 def parar():
     global proceso
     time.after_cancel(proceso)
@@ -23,10 +31,6 @@ root.title('Cronometro')
  
 time = Label(root, fg='red', width=20, font=("","18"))
 time.pack()
- 
-# si queremos que se autoejecuta al iniciar el programa hay que desomentar
-# esta linea y comentar los botones
-#iniciar()
  
 # Generamos un frame para poner los botones de iniciar y parar
 frame=Frame(root)
