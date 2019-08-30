@@ -2,11 +2,13 @@ from tkinter import Tk,Label,Button,Frame
 from datetime import datetime
 proceso=0
 i = 0
-
+running = False
+first = 0
 def iniciar():
     global proceso
     global tini
-   
+    global running
+    running = True
     # Save the starting time of our timer as a time reference
     tini = datetime.now()
 
@@ -16,7 +18,7 @@ def iniciar():
 def ejecutar():
   global proceso
   global tini
-  
+  global time
   # Write the time
   time['text'] = datetime.now()-tini
   
@@ -25,14 +27,27 @@ def ejecutar():
 
 def split():
   global proceso
-  global i
-  i += 1
-  timesplit = time
-  timesplit = Label(root, fg='red', width=20, font=("","14"))
-  timesplit.pack()
+  global i, first
+  global lista
+  global partial
+
+  if (running==True):
+    if (i==0) and (first==0):
+      print(first)
+      partial = datetime.now()
+      lista[i]['text'] = datetime.now()-tini
+      first = 1
+    else:
+      lista[i]['text'] = datetime.now()-partial
+      partial = datetime.now()
+    i += 1
+    if (i>=3):
+      i =0
 
 def parar():
     global proceso
+    global running
+    running = False
     time.after_cancel(proceso)
  
 root = Tk()
@@ -40,17 +55,26 @@ root.title('Cronometro')
  
 time = Label(root, fg='red', width=20, font=("","18"))
 time.pack()
- 
+
+split_one=Label(root, fg='red', width=20, font=("","14"))
+split_one.pack()
+split_two=Label(root, fg='red', width=20, font=("","14"))
+split_two.pack()
+split_tre=Label(root, fg='red', width=20, font=("","14"))
+split_tre.pack()
+
+lista = [split_one, split_two, split_tre]
+
 # Generamos un frame para poner los botones de iniciar y parar
 frame=Frame(root)
 btnIniciar=Button(frame, fg='blue', text='Iniciar', command=iniciar)
-btnIniciar.grid(row=1, column=1)
+btnIniciar.grid(row=2, column=1)
 btnSplit=Button(frame, fg='blue', text='Split', command=split)
-btnSplit.grid(row=1, column=2)
+btnSplit.grid(row=2, column=2)
 btnParar=Button(frame, fg='blue', text='Parar', command=parar)
-btnParar.grid(row=1, column=3)
+btnParar.grid(row=2, column=3)
 btnSalir=Button(frame, fg='blue', text='Salir', command=quit)
-btnSalir.grid(row=1, column=4)
+btnSalir.grid(row=2, column=4)
 frame.pack()
  
 root.mainloop()
