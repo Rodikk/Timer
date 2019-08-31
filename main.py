@@ -1,9 +1,11 @@
 from tkinter import Tk,Label,Button,Frame
 from datetime import datetime
+
 proceso=0
 i = 0
 running = False
-first = 0
+first = True
+
 def iniciar():
     global proceso
     global tini
@@ -23,9 +25,8 @@ def ejecutar():
   now = datetime.now()-tini
   
   # Write the time
-  date = strfdelta(now, "{hours}:{minutes}:{seconds}")
-  cs = int(now.microseconds/10000)
-  time['text'] = str(date)+":"+str(cs)
+  date = strfdelta(now, "{hours}:{minutes}:{seconds}:{centiseconds}")
+  time['text'] = str(date)
   
   #Calls itself recursively every ms updating the time on the timer
   proceso=time.after(1, ejecutar)
@@ -34,20 +35,24 @@ def split():
   global proceso
   global i, first
   global lista
-  global partial
+  global clock
 
   if (running==True):
-    if (i==0) and (first==0):
-      print(first)
-      partial = datetime.now()
-      lista[i]['text'] = datetime.now()-tini
-      first = 1
+    if (i==0) and (first==True):
+      
+      clock = datetime.now()
+      partial = datetime.now()-tini
+      timesplit = strfdelta(partial, "{hours}:{minutes}:{seconds}:{centiseconds}")
+      lista[i]['text'] = str(timesplit)
+      first = False
     else:
-      lista[i]['text'] = datetime.now()-partial
-      partial = datetime.now()
+      partial = datetime.now()-clock
+      timesplit = strfdelta(partial, "{hours}:{minutes}:{seconds}:{centiseconds}")
+      lista[i]['text'] = str(timesplit)
+      clock = datetime.now()
     i += 1
     if (i>=3):
-      i =0
+      i = 0
 
 def parar():
     global proceso
@@ -59,6 +64,7 @@ def strfdelta(tdelta, fmt):
     d = {"days": tdelta.days}
     d["hours"], rem = divmod(tdelta.seconds, 3600)
     d["minutes"], d["seconds"] = divmod(rem, 60)
+    d["centiseconds"] = int(tdelta.microseconds/10000)
     return fmt.format(**d)
  
 root = Tk()
