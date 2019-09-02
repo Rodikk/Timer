@@ -1,4 +1,3 @@
-    
 from tkinter import Tk,Label,Button,Frame
 from datetime import datetime
 
@@ -71,10 +70,9 @@ def strfdelta(tdelta, fmt):
     d["centiseconds"] = int(tdelta.microseconds/10000)
     return fmt.format(**d)
 
-def quit():
+def salir():
     global root
     root.destroy()
-
 
 root = Tk()
 root.title('Cronometro')
@@ -100,9 +98,9 @@ btnSplit=Button(frame, fg='blue', text='Split', command=split)
 btnSplit.grid(row=2, column=2)
 btnParar=Button(frame, fg='blue', text='Parar', command=parar)
 btnParar.grid(row=2, column=3)
-btnSalir=Button(frame, fg='blue', text='Salir', command=quit)
+btnSalir=Button(frame, fg='blue', text='Salir', command=salir)
 btnSalir.grid(row=2, column=4)
 
-frame.pack()
+frame.pack(side="bottom")
  
 root.mainloop()
