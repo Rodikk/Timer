@@ -1,3 +1,4 @@
+    
 from tkinter import Tk,Label,Button,Frame
 from datetime import datetime
 
@@ -57,7 +58,10 @@ def split():
 def parar():
     global proceso
     global running
+    global first, i
     running = False
+    first = True
+    i = 0
     time.after_cancel(proceso)
    
 def strfdelta(tdelta, fmt):
@@ -66,7 +70,12 @@ def strfdelta(tdelta, fmt):
     d["minutes"], d["seconds"] = divmod(rem, 60)
     d["centiseconds"] = int(tdelta.microseconds/10000)
     return fmt.format(**d)
- 
+
+def quit():
+    global root
+    root.destroy()
+
+
 root = Tk()
 root.title('Cronometro')
 root.geometry('225x400') # anchura x altura
