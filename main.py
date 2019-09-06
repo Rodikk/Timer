@@ -4,19 +4,25 @@ from datetime import datetime
 # Define glboal variables.
 proceso = 0
 running = False
-t_pause=0
+t_pause=datetime(1,1,1)
 #i and first are flag variablers for the splitter.
 i = 0
 first = True
 
 def iniciar():  #Starts the timer.
-    if running==True:
-        resume()
-        return 0
     global proceso
     global tini
     global running
+    global t_pause
+    
+    if running==True:
+        return 0
+    elif (datetime.now()-datetime(1,1,1)!=datetime.now()-t_pause):
+        resume()
+        return 0
+    
     running = True
+    
     # Save the starting time as reference.
     tini = datetime.now()
 
@@ -28,6 +34,7 @@ def resume():
     global tini
     global t_pause
     
+    tini = tini + (datetime.now()-t_pause)
     
     proceso=time.after(1,ejecutar)
  
@@ -71,6 +78,9 @@ def split():    #Save an split time for a section or partial. Does not affect th
 def pausar():
     global proceso
     global t_pause
+    global running
+    
+    running = False
     
     t_pause = datetime.now()
     
@@ -119,8 +129,8 @@ btnIniciar=Button(frame, fg='blue', text='Iniciar', command=iniciar)
 btnIniciar.grid(row=1, column=1)
 btnSplit=Button(frame, fg='blue', text='Split', command=split)
 btnSplit.grid(row=1, column=2)
-#btnPausa=Button(frame, fg='blue', text='Pausa', command=pausar)
-#btnPausa.grid(row=1, column=3)
+btnPausa=Button(frame, fg='blue', text='Pausa', command=pausar)
+btnPausa.grid(row=1, column=3)
 btnParar=Button(frame, fg='blue', text='Parar', command=parar)
 btnParar.grid(row=1, column=4)
 btnSalir=Button(frame, fg='blue', text='Salir', command=salir)
